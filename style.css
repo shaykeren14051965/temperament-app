@@ -93,7 +93,7 @@ h3 { font-size: 17px; margin: 0 0 8px; }
   border-radius: var(--radius);
   background: #FFF;
   cursor: pointer;
-  font-size: 15px;
+  font-size: 16px;
   font-family: inherit;
   line-height: 1.4;
   transition: border-color 0.15s, background 0.15s;
@@ -162,29 +162,33 @@ h3 { font-size: 17px; margin: 0 0 8px; }
 /* ===== טאבים בדף תוצאות ===== */
 .tabs {
   display: flex;
-  border-bottom: 2px solid #E0E0E0;
+  gap: 6px;
   margin-bottom: 20px;
-  gap: 4px;
+  flex-wrap: wrap;
 }
 .tab-btn {
-  background: none;
-  border: none;
-  padding: 10px 14px;
-  font-size: 14px;
+  background: #F0F2F4;
+  border: 1px solid #D5D8DC;
+  border-radius: 7px;
+  padding: 9px 15px;
+  font-size: 15px;
   font-family: inherit;
   cursor: pointer;
-  color: #888;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  transition: color 0.15s, border-color 0.15s;
+  color: #666;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
   white-space: nowrap;
 }
 .tab-btn.active {
-  color: #222;
-  border-bottom-color: #2C3E50;
+  background: #2C3E50;
+  color: #fff;
+  border-color: #2C3E50;
   font-weight: bold;
 }
-.tab-btn:hover:not(.active) { color: #444; }
+.tab-btn:hover:not(.active) {
+  background: #E2E6EA;
+  color: #333;
+  border-color: #BDC3C7;
+}
 
 .tab-panel { display: none; }
 .tab-panel.active { display: block; }
@@ -323,6 +327,6 @@ h3 { font-size: 17px; margin: 0 0 8px; }
   .hero-emoji { font-size: 44px; }
   .answer-btn { min-height: 64px; font-size: 16px; }
   .nav-arrow  { font-size: 32px; }
-  .tab-btn    { padding: 8px 10px; font-size: 13px; }
+  .tab-btn    { padding: 7px 11px; font-size: 14px; }
   .profile-name { font-size: 19px; }
 }
