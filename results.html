@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>התוצאה שלך – חכה למים עמוקים</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ─── הכרזת תוצאה ─── */
+    .announcement-emoji {
+      font-size: 56px;
+      text-align: center;
+      margin-bottom: 12px;
+      animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    @keyframes popIn {
+      from { transform: scale(0.5); opacity: 0; }
+      to   { transform: scale(1);   opacity: 1; }
+    }
+    .announcement-name {
+      text-align: center;
+      font-size: 28px;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+    .announcement-spark {
+      text-align: center;
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+    .type-label {
+      display: block;
+      text-align: center;
+      font-size: 13px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      padding: 5px 14px;
+      border-radius: 20px;
+      margin: 0 auto 8px;
+      width: fit-content;
+    }
+    .type-pure         { background: #FEF0EF; color: #C0392B; }
+    .type-mixed_clear  { background: #EAF4FF; color: #1a5f9e; }
+    .type-mixed_unclear{ background: #FEF9E7; color: #7D6608; }
+    .type-ambiguous    { background: #F4ECF7; color: #6C3483; }
+    .type-too_few      { background: #FDFEFE; color: #566573; border: 1px solid #ccc; }
+
+    .secondary-hint {
+      text-align: center;
+      font-size: 14px;
+      color: #555;
+      margin-bottom: 16px;
+    }
+
+    /* ─── גרף עמודות ─── */
+    .score-bars     { margin: 20px 0 8px; }
+    .score-row      { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .score-label    { width: 80px; font-size: 13px; flex-shrink: 0; }
+    .score-bar-bg   { flex: 1; height: 18px; background: #EBEBEB; border-radius: 4px; overflow: hidden; }
+    .score-bar-fill { height: 100%; border-radius: 4px; transition: width 0.6s ease; }
+    .score-pct      { width: 34px; text-align: left; font-size: 13px; color: #666; flex-shrink: 0; }
+
+    /* ─── כרטיס too_few ─── */
+    .toofew-card { text-align: center; padding: 32px 20px; }
+    .toofew-card .big-num {
+      font-size: 48px; font-weight: bold; color: #CCC; margin-bottom: 8px;
+    }
+
+    /* ─── פאנל דב לבדיקות ─── */
+    #dev-panel {
+      display: none;
+      background: #F0F4F8;
+      border: 1px dashed #AAA;
+      border-radius: 8px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+    #dev-panel h4 { margin: 0 0 10px; font-size: 13px; color: #666; }
+    .dev-btn {
+      display: inline-block;
+      margin: 4px;
+      padding: 6px 12px;
+      border: 1px solid #999;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      background: #fff;
+    }
+    .dev-btn:hover { background: #e8e8e8; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- ─── פאנל בדיקות (מוצג רק כש-?dev=1) ─── -->
+  <div id="dev-panel">
+    <h4>🧪 מצב פיתוח – בדיקת כל מצבי התוצאה</h4>
+    <button class="dev-btn" onclick="testResult('pure')">pure (כולרי 65%)</button>
+    <button class="dev-btn" onclick="testResult('mixed_clear')">mixed_clear (כולרי 50%)</button>
+    <button class="dev-btn" onclick="testResult('mixed_unclear')">mixed_unclear (כולרי 40%)</button>
+    <button class="dev-btn" onclick="testResult('ambiguous')">ambiguous (פיזור)</button>
+    <button class="dev-btn" onclick="testResult('too_few')">too_few (5 תשובות)</button>
+  </div>
+
+  <!-- ─── מסך: too_few ─── -->
+  <div id="screen-too-few" style="display:none;">
+    <div class="card toofew-card">
+      <div class="big-num" id="toofew-count">5</div>
+      <h2 style="color:#888; margin-bottom:10px;">נדרשות עוד תשובות</h2>
+      <p style="color:#999; font-size:15px; margin-bottom:24px;">
+        ענית על <strong id="toofew-answered">5</strong> שאלות.<br>
+        יש לענות על לפחות <strong>12</strong> שאלות כדי לקבל תוצאה משמעותית.
+      </p>
+      <a href="questionnaire.html" class="btn btn-primary" style="display:inline-block;width:auto;padding:14px 32px;">
+        חזרה לשאלון ←
+      </a>
+    </div>
+  </div>
+
+  <!-- ─── מסך: הכרזת תוצאה ─── -->
+  <div id="screen-announcement" style="display:none;">
+
+    <div class="card">
+      <!-- אמוג'י + שם -->
+      <div class="announcement-emoji" id="ann-emoji"></div>
+      <div class="announcement-name"  id="ann-name"></div>
+      <div class="announcement-spark" id="ann-spark"></div>
+
+      <!-- תווית סוג -->
+      <span class="type-label" id="ann-type-badge"></span>
+
+      <!-- אם מעורב: שם המשני -->
+      <div class="secondary-hint" id="ann-secondary" style="display:none;"></div>
+
+      <!-- פס צבע -->
+      <div class="profile-color-bar" id="ann-color-bar" style="margin:16px 0;"></div>
+
+      <!-- גרף עמודות -->
+      <div class="score-bars">
+        <div class="score-row">
+          <div class="score-label">🔥 כולרי</div>
+          <div class="score-bar-bg"><div class="score-bar-fill" id="bar-C" style="width:0%;background:var(--color-C)"></div></div>
+          <div class="score-pct" id="pct-C">0%</div>
+        </div>
+        <div class="score-row">
+          <div class="score-label">🌬️ סנגוויני</div>
+          <div class="score-bar-bg"><div class="score-bar-fill" id="bar-S" style="width:0%;background:var(--color-S)"></div></div>
+          <div class="score-pct" id="pct-S">0%</div>
+        </div>
+        <div class="score-row">
+          <div class="score-label">💧 פלגמטי</div>
+          <div class="score-bar-bg"><div class="score-bar-fill" id="bar-P" style="width:0%;background:var(--color-P)"></div></div>
+          <div class="score-pct" id="pct-P">0%</div>
+        </div>
+        <div class="score-row">
+          <div class="score-label">🌍 מלנכולי</div>
+          <div class="score-bar-bg"><div class="score-bar-fill" id="bar-M" style="width:0%;background:var(--color-M)"></div></div>
+          <div class="score-pct" id="pct-M">0%</div>
+        </div>
+      </div>
+
+      <!-- הסבר קצר לפי מצב -->
+      <div id="ann-explanation" style="font-size:14px;color:#666;margin:12px 0 20px;line-height:1.6;text-align:center;"></div>
+
+      <!-- כפתור למעבר לפרופיל -->
+      <button class="btn btn-primary" onclick="showFullProfile()">
+        לפרופיל האישי שלי ←
+      </button>
+    </div>
+  </div>
+
+  <!-- ─── מסך: פרופיל מלא (שלב 6) ─── -->
+  <div id="screen-profile" style="display:none;">
+
+    <!-- כרטיס כותרת מקוצר -->
+    <div class="card" style="padding:16px 20px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span id="prof-emoji" style="font-size:28px;"></span>
+        <div>
+          <div id="prof-name" style="font-weight:bold;font-size:18px;"></div>
+          <div id="prof-spark" style="font-size:13px;color:#888;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- טאבים -->
+    <div class="card">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('built',this)">כך אני בנוי</button>
+        <button class="tab-btn" onclick="switchTab('relations',this)">ביחסים</button>
+        <button class="tab-btn" onclick="switchTab('works',this)">מה עובד</button>
+        <button class="tab-btn" onclick="switchTab('growth',this)">מתנות וצמיחה</button>
+      </div>
+      <div id="tab-built"     class="tab-panel active"><ul class="profile-list" id="list-built"></ul></div>
+      <div id="tab-relations" class="tab-panel"><ul class="profile-list" id="list-relations"></ul></div>
+      <div id="tab-works"     class="tab-panel"><ul class="profile-list" id="list-works"></ul></div>
+      <div id="tab-growth"    class="tab-panel"><ul class="profile-list" id="list-growth"></ul></div>
+
+      <!-- כרטיס טמפרמנט משני -->
+      <div class="secondary-card" id="secondary-card" style="display:none;">
+        <h3 id="secondary-title"></h3>
+        <p  id="secondary-spark" style="font-size:14px;color:#555;line-height:1.5;margin:0;"></p>
+      </div>
+    </div>
+
+    <!-- דירוג – רק לטהורים -->
+    <div class="card" id="rating-card" style="display:none;">
+      <h3 style="margin-bottom:6px;">עד כמה הפרופיל מרגיש נכון לך?</h3>
+      <p style="font-size:13px;color:#999;margin:0 0 10px;">1 = בכלל לא מדויק &nbsp;·&nbsp; 5 = מדויק מאוד</p>
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <div class="stars" id="stars-container">
+          <span class="star" onclick="rateStar(1)">★</span>
+          <span class="star" onclick="rateStar(2)">★</span>
+          <span class="star" onclick="rateStar(3)">★</span>
+          <span class="star" onclick="rateStar(4)">★</span>
+          <span class="star" onclick="rateStar(5)">★</span>
+        </div>
+        <span id="rating-confirm" style="display:none;font-size:14px;color:#27AE60;">✓ תודה!</span>
+      </div>
+    </div>
+
+    <!-- פידבק חופשי -->
+    <div class="card">
+      <h3 style="margin-bottom:8px;">יש לך מה להוסיף?</h3>
+      <p style="font-size:14px;color:#777;margin:0 0 8px;line-height:1.5;">
+        מה הדהד? מה פחות מדויק? כל מה שתרצה לשתף.
+      </p>
+      <textarea class="feedback-area" id="profile-feedback"
+        placeholder="שתף אותנו בחוויה שלך..."></textarea>
+      <div style="display:flex;align-items:center;gap:12px;margin-top:10px;">
+        <button class="btn btn-secondary" onclick="submitProfileFeedback()">שלח</button>
+        <span id="feedback-confirm" style="display:none;font-size:14px;color:#27AE60;">✓ תודה! הפידבק נשמר.</span>
+      </div>
+    </div>
+
+    <div style="text-align:center;margin-top:8px;padding-bottom:24px;">
+      <a href="index.html" class="btn btn-secondary">חזרה לדף הבית</a>
+    </div>
+
+  </div><!-- /screen-profile -->
+
+</div><!-- /container -->
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>שאלון טמפרמנט – חכה למים עמוקים</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* ─── מצב טעינה ─── */
+    #loading-screen {
+      text-align: center;
+      padding: 60px 20px;
+      color: #888;
+      font-size: 16px;
+    }
+    #loading-screen .spinner {
+      font-size: 36px;
+      display: block;
+      margin-bottom: 16px;
+      animation: spin 1.2s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ─── כרטיס שאלה – כניסה ─── */
+    #question-card {
+      animation: fadeIn 0.25s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    /* ─── שורת ניווט ─── */
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 16px;
+    }
+
+    /* ─── מוני תשובות ─── */
+    .answered-count {
+      font-size: 12px;
+      color: #aaa;
+      text-align: center;
+      margin-top: 10px;
+    }
+    .answered-count span {
+      color: #27AE60;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- מסך טעינה -->
+  <div id="loading-screen">
+    <i class="spinner">🌊</i>
+    טוען שאלון...
+  </div>
+
+  <!-- תוכן השאלון (מוסתר עד טעינה) -->
+  <div id="questionnaire-content" style="display:none;">
+
+    <!-- ─── Progress Bar ─── -->
+    <div class="progress-wrap">
+      <div class="progress-label">
+        <span id="progress-text">שאלה 1 מתוך 20</span>
+        <span id="progress-pct">0%</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- ─── כרטיס שאלה ─── -->
+    <div class="card" id="question-card">
+
+      <!-- מטא -->
+      <div class="category-badge" id="q-category"></div>
+      <h2 id="q-topic" style="margin-bottom:8px;"></h2>
+      <p id="q-text" class="subtitle" style="margin-bottom:22px;"></p>
+
+      <!-- תשובות -->
+      <div id="answers-container"></div>
+
+      <!-- הערה אופציונלית -->
+      <div style="margin-top:18px;">
+        <label style="font-size:13px;color:#999;">הערה לשאלה זו (אופציונלי):</label>
+        <textarea class="feedback-area" id="q-feedback"
+          placeholder="משהו בשאלה היה קשה לסמן? רשום כאן..."></textarea>
+      </div>
+
+    </div>
+
+    <!-- ─── ניווט ─── -->
+    <div class="nav-row">
+      <button class="nav-arrow" id="btn-prev" onclick="navigate(-1)" title="שאלה קודמת">→</button>
+      <button class="btn btn-secondary" id="btn-skip" onclick="navigate(1)">דלג</button>
+      <button class="nav-arrow" id="btn-next" onclick="navigate(1)" title="שאלה הבאה">←</button>
+    </div>
+
+    <!-- מונה תשובות -->
+    <p class="answered-count" id="answered-count"></p>
+
+    <!-- ─── כפתור סיום (מופיע בשאלה האחרונה) ─── -->
+    <div style="margin-top:20px;display:none;" id="submit-wrap">
+      <button class="btn btn-primary" onclick="submitQuestionnaire()">סיים וקבל תוצאה ←</button>
+      <div class="error-msg" id="submit-error">
+        ענית על <span id="err-count">0</span> שאלות. יש לענות על לפחות 12 לפני קבלת התוצאה.
+      </div>
+    </div>
+
+  </div><!-- /questionnaire-content -->
+
+</div><!-- /container -->
+
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+# קבצי מקור (לא חלק מהאפליקציה)
+*.docx
+*.tmp
+~$*
+
+# קבצים ספציפיים
+test.html
+google_apps_script.gs
