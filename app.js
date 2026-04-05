@@ -202,6 +202,9 @@ function submitQuestionnaire() {
     return;
   }
 
+  // חשב תוצאה לפני השמירה והשליחה
+  calculateResult();
+
   // שמור סשן ועבור לתוצאות
   localStorage.setItem('temperament_session', JSON.stringify(session));
 
