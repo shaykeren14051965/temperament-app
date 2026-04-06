@@ -61,6 +61,9 @@
   <!-- תוכן השאלון (מוסתר עד טעינה) -->
   <div id="questionnaire-content" style="display:none;">
 
+    <!-- ─── הודעת שלב דינמית ─── -->
+    <div id="progress-message" style="font-size:13px;color:#888;text-align:center;margin-bottom:10px;min-height:18px;"></div>
+
     <!-- ─── Progress Bar ─── -->
     <div class="progress-wrap">
       <div class="progress-label">
@@ -95,7 +98,7 @@
     <!-- ─── ניווט ─── -->
     <div class="nav-row">
       <button class="nav-arrow" id="btn-prev" onclick="navigate(-1)" title="שאלה קודמת">→</button>
-      <button class="btn btn-secondary" id="btn-skip" onclick="navigate(1)">דלג</button>
+      <button class="btn btn-secondary" id="btn-skip" onclick="navigate(1)">אף אחת לא ממש אני</button>
       <button class="nav-arrow" id="btn-next" onclick="navigate(1)" title="שאלה הבאה">←</button>
     </div>
 

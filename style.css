@@ -134,19 +134,19 @@ h3 { font-size: 17px; margin: 0 0 8px; }
   margin-top: 20px;
 }
 .nav-arrow {
-  background: none;
-  border: none;
-  font-size: 28px;
+  background: #F0F2F4;
+  border: 1px solid #D5D8DC;
+  font-size: 32px;
   cursor: pointer;
-  color: #555;
-  padding: 4px 10px;
+  color: #444;
+  padding: 8px 18px;
   line-height: 1;
-  border-radius: 6px;
-  transition: background 0.15s;
+  border-radius: 8px;
+  transition: background 0.15s, border-color 0.15s;
 }
-.nav-arrow:hover  { background: #eee; }
-.nav-arrow:disabled { color: #ccc; cursor: default; }
-.nav-arrow:disabled:hover { background: none; }
+.nav-arrow:hover  { background: #E2E6EA; border-color: #BDC3C7; }
+.nav-arrow:disabled { color: #ccc; cursor: default; background: #F8F8F8; border-color: #E8E8E8; }
+.nav-arrow:disabled:hover { background: #F8F8F8; border-color: #E8E8E8; }
 
 /* ===== תגית קטגוריה ===== */
 .category-badge {
@@ -188,6 +188,15 @@ h3 { font-size: 17px; margin: 0 0 8px; }
   background: #E2E6EA;
   color: #333;
   border-color: #BDC3C7;
+}
+
+.tab-sep {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: #BDC3C7;
+  user-select: none;
+  padding: 0 1px;
 }
 
 .tab-panel { display: none; }
@@ -326,7 +335,7 @@ h3 { font-size: 17px; margin: 0 0 8px; }
   .hero h1   { font-size: 22px; }
   .hero-emoji { font-size: 44px; }
   .answer-btn { min-height: 64px; font-size: 16px; }
-  .nav-arrow  { font-size: 32px; }
+  .nav-arrow  { font-size: 28px; padding: 8px 14px; }
   .tab-btn    { padding: 7px 11px; font-size: 14px; }
   .profile-name { font-size: 19px; }
 }

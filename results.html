@@ -127,6 +127,7 @@
       <!-- אמוג'י + שם -->
       <div class="announcement-emoji" id="ann-emoji"></div>
       <div class="announcement-name"  id="ann-name"></div>
+      <div class="announcement-tagline" id="ann-tagline" style="font-size:15px;color:#444;line-height:1.7;text-align:center;margin:6px 0 10px;white-space:pre-line;"></div>
       <div class="announcement-spark" id="ann-spark"></div>
 
       <!-- תווית סוג -->
@@ -163,7 +164,17 @@
       </div>
 
       <!-- הסבר קצר לפי מצב -->
-      <div id="ann-explanation" style="font-size:14px;color:#666;margin:12px 0 20px;line-height:1.6;text-align:center;"></div>
+      <div id="ann-explanation" style="font-size:14px;color:#666;margin:12px 0 4px;line-height:1.6;text-align:center;"></div>
+
+      <!-- disclaimer מתחת לגרף -->
+      <div id="ann-disclaimer" style="font-size:13px;color:#999;text-align:center;margin:0 0 20px;line-height:1.5;"></div>
+
+      <!-- טקסט מעל כפתור הפרופיל -->
+      <p style="font-size:14px;color:#555;text-align:center;line-height:1.65;margin:0 0 14px;">
+        הזיהוי הוא רק הצעד הראשון.<br>
+        בפרופיל האישי תוכל לראות איך הטמפרמנט הזה מתבטא בתוכך,
+        במפגש עם אחרים, ובמקומות שבהם אפשר לגדול.
+      </p>
 
       <!-- כפתור למעבר לפרופיל -->
       <button class="btn btn-primary" onclick="showFullProfile()">
@@ -190,8 +201,11 @@
     <div class="card">
       <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('built',this)">כך אני בנוי</button>
+        <span class="tab-sep">‹</span>
         <button class="tab-btn" onclick="switchTab('relations',this)">ביחסים</button>
+        <span class="tab-sep">‹</span>
         <button class="tab-btn" onclick="switchTab('works',this)">מה עובד</button>
+        <span class="tab-sep">‹</span>
         <button class="tab-btn" onclick="switchTab('growth',this)">מתנות וצמיחה</button>
       </div>
       <div id="tab-built"     class="tab-panel active"><ul class="profile-list" id="list-built"></ul></div>
@@ -224,16 +238,24 @@
 
     <!-- פידבק חופשי -->
     <div class="card">
-      <h3 style="margin-bottom:8px;">יש לך מה להוסיף?</h3>
+      <h3 style="margin-bottom:8px;">משהו פגש אותך?</h3>
       <p style="font-size:14px;color:#777;margin:0 0 8px;line-height:1.5;">
-        מה הדהד? מה פחות מדויק? כל מה שתרצה לשתף.
+        יש משפט שתפס אותך במיוחד? נשמח לדעת.
       </p>
       <textarea class="feedback-area" id="profile-feedback"
-        placeholder="שתף אותנו בחוויה שלך..."></textarea>
+        placeholder="שתף אותנו ברגע שנגע בך..."></textarea>
       <div style="display:flex;align-items:center;gap:12px;margin-top:10px;">
         <button class="btn btn-secondary" onclick="submitProfileFeedback()">שלח</button>
         <span id="feedback-confirm" style="display:none;font-size:14px;color:#27AE60;">✓ תודה! הפידבק נשמר.</span>
       </div>
+    </div>
+
+    <!-- מה בהמשך -->
+    <div class="card" style="background:#F8F9FA;border:1px solid #E8EAEC;">
+      <h3 style="margin-bottom:10px;font-size:16px;">מה בהמשך</h3>
+      <p style="font-size:14px;color:#555;line-height:1.75;margin:0;">
+        בהמשך נפתח גם את החלק של "ביני לבין אחר", שבו תוכל לראות איך הטמפרמנט שלך פוגש אנשים אחרים, ואיך נכון יותר ליצור חיבור, להתמודד עם חיכוך, ולדבר בשפה שנשמעת.
+      </p>
     </div>
 
     <div style="text-align:center;margin-top:8px;padding-bottom:24px;">

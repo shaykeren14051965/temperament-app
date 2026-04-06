@@ -14,11 +14,19 @@ function shuffleArray(arr) {
 }
 
 const CATEGORY_LABELS = {
-  physical:    'פיזי',
-  situational: 'מצבי',
-  theoretical: 'תיאורטי',
-  social:      'חברתי'
+  physical:    'איך אתה זז בעולם',
+  situational: 'מה קורה לך תחת לחץ',
+  theoretical: 'איך אתה חושב ומחליט',
+  social:      'איך אתה פוגש אנשים'
 };
+
+function getProgressMessage(index) {
+  if (index <= 4)  return 'מתחילים – שאלות על הגוף והתנועה שלך';
+  if (index <= 9)  return 'אחרי החלק הראשון – עכשיו מצבים';
+  if (index <= 14) return 'באמצע הדרך – שאלות על איך אתה חושב';
+  if (index <= 18) return 'כמעט סיימת – שאלות על קשרים';
+  return 'שאלה אחרונה';
+}
 
 // ─── מצב סשן ─────────────────────────────────────────────────────────────────
 
@@ -83,6 +91,10 @@ function renderQuestion(index) {
   const q     = getQuestion(index);
   const total = getTotalQuestions();
 
+  // ── הודעת שלב דינמית ──
+  const msgEl = document.getElementById('progress-message');
+  if (msgEl) msgEl.textContent = getProgressMessage(index);
+
   // ── progress bar ──
   const pct = Math.round((index / total) * 100);
   document.getElementById('progress-fill').style.width = pct + '%';
@@ -127,9 +139,13 @@ function renderQuestion(index) {
 
   // ── ניווט ──
   document.getElementById('btn-prev').disabled = (index === 0);
-  document.getElementById('btn-next').disabled = (index === total - 1);
 
-  // כפתור "דלג" – נסתר בשאלה האחרונה (שם יש "סיים")
+  // בשאלה האחרונה: הסתר חץ קדימה (שמאל) לגמרי
+  const nextBtn = document.getElementById('btn-next');
+  nextBtn.style.visibility = (index === total - 1) ? 'hidden' : 'visible';
+  nextBtn.disabled = (index === total - 1);
+
+  // כפתור "אף אחת לא ממש אני" – נסתר בשאלה האחרונה (שם יש "סיים")
   const skipBtn = document.getElementById('btn-skip');
   if (skipBtn) skipBtn.style.visibility = (index === total - 1) ? 'hidden' : 'visible';
 
@@ -248,6 +264,13 @@ function calculateResult() {
 
 // ─── הצגת מסך הכרזה ──────────────────────────────────────────────────────────
 
+const TEMPERAMENT_TAGLINES = {
+  C: 'אתה לא מחכה שדברים יקרו –\nאתה גורם להם לקרות.',
+  S: 'אתה מביא חיים לכל חדר\nשאתה נכנס אליו –\nוגם לאנשים שבתוכו.',
+  P: 'כשכולם סביבך מתנדנדים ברוח –\nאתה השורש שמחזיק את הכל.',
+  M: 'אתה רואה מה שאחרים מפספסים –\nומרגיש מה שאחרים לא יודעים\nלשים עליו מילים.'
+};
+
 const TYPE_LABELS = {
   pure:          'טמפרמנט דומיננטי',
   mixed_clear:   'צירוף ברור',
@@ -274,9 +297,11 @@ function displayAnnouncement(result) {
 
   const profile = getProfile(result.dominant);
 
-  // אמוג'י + שם + spark
+  // אמוג'י + שם + tagline + spark
   document.getElementById('ann-emoji').textContent = profile.emoji;
   document.getElementById('ann-name').textContent  = profile.name;
+  const taglineEl = document.getElementById('ann-tagline');
+  if (taglineEl) taglineEl.textContent = TEMPERAMENT_TAGLINES[result.dominant] || '';
   document.getElementById('ann-spark').textContent = profile.spark;
 
   // תווית סוג
@@ -298,6 +323,13 @@ function displayAnnouncement(result) {
   // הסבר
   document.getElementById('ann-explanation').textContent =
     TYPE_EXPLANATIONS[result.type] || '';
+
+  // disclaimer מתחת לגרף
+  const disclaimerEl = document.getElementById('ann-disclaimer');
+  if (disclaimerEl) {
+    disclaimerEl.textContent =
+      `זו לא קופסה. רוב האנשים הם שילוב – אצלך ${profile.name} הוא רק המוביל כרגע.`;
+  }
 
   // גרף עמודות
   for (const t of ['C', 'S', 'P', 'M']) {
@@ -361,7 +393,7 @@ function populateProfile(result) {
       const title = document.createElement('h3');
       title.style.marginBottom = '10px';
       title.innerHTML =
-        `${secProfile.emoji} מה ${secProfile.name} מוסיף`;
+        `${secProfile.emoji} ${secProfile.name} – הטמפרמנט המשלים שלך`;
       secDiv.appendChild(title);
 
       const secList = document.createElement('ul');
