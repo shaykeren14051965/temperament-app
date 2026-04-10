@@ -167,14 +167,15 @@ h3 { font-size: 17px; margin: 0 0 8px; }
   flex-wrap: wrap;
 }
 .tab-btn {
-  background: #F0F2F4;
-  border: 1px solid #D5D8DC;
+  background: #DDE3EA;
+  border: 1px solid #B8C4CE;
   border-radius: 7px;
   padding: 9px 15px;
   font-size: 15px;
   font-family: inherit;
   cursor: pointer;
-  color: #666;
+  color: #3D4E5C;
+  font-weight: 500;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
   white-space: nowrap;
 }
@@ -185,9 +186,9 @@ h3 { font-size: 17px; margin: 0 0 8px; }
   font-weight: bold;
 }
 .tab-btn:hover:not(.active) {
-  background: #E2E6EA;
-  color: #333;
-  border-color: #BDC3C7;
+  background: #C8D3DC;
+  color: #2C3E50;
+  border-color: #9AABB8;
 }
 
 .tab-sep {
